@@ -4,12 +4,11 @@
 #   "# attr_accessor :x, :y, :face " in robot class
 
 require_relative "../lib/robot"
-require "spec_helper"
+require_relative "spec_helper"
 
 describe Robot do
-	describe "place(x,y,face) " do
-		let(:robot) { Robot.new  }
-
+	let(:robot) { Robot.new  }
+	describe "method: place(x,y,face); " do	
 		context "without place command:\n" do
 			it "all shuold be nil" do
 				expect(robot.x).to eq(nil)
@@ -42,11 +41,8 @@ describe Robot do
 				end
 			end
 		end
-
-		
-
-
-
 	end
+
+
 
 end
