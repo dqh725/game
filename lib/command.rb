@@ -1,12 +1,12 @@
-require_relative "variable"
+require_relative "constants"
 
 # command factory pattern
 class Command
 
-	def initialize
-		@xmax = Variable.MAX_X
-		@ymax = Variable.MAX_Y
-		#@move_step = Variable.MOVE_STEP
+	def initialize robot
+		@xmax = Constants::MAX_X
+		@ymax = Constants::MAX_Y
+    @robot = robot
 	end
 
   def take(robot)
@@ -14,34 +14,35 @@ class Command
   	return self
   end
 
-  # this method will be extended into command object with certail module
+  # executed method is not defined yet
+  # It method will be extended into command object with certain module
   # E.G. command.extend(Move).execute
-  # def execute
-  # end
 
 end
 
 module Place
   def execute(*args)
-    @robot.place(*args) if check_place_params *args
+    if check_place_params *args
+      @robot.place(args[0].to_i, args[1].to_i, args[2])
+    end
   end
 
   private
     # check place command ... return true if is legal
     def check_place_params *args
-      if args.length != 3 
+      if args.length != 3
         wrong_params_number "wrong number of arguments (#{args.length} for 3)"
         return false
       end
       # params number is 3 ...
-      x = args[0]
-      y = args[1]
+      x = args[0].to_i if is_integer args[0]
+      y = args[1].to_i if is_integer args[1]
       face = args[2]
-      faces = Variable.FACES
+      faces = Constants::FACES
       case
-      when x.class != Fixnum
+      when !is_integer(args[0])
         wrong_type "x should be an integer"
-      when y.class != Fixnum
+      when !is_integer(args[1])
         wrong_type "y should be and integer"
       when face.class != String
         wrong_type "face should be string type"
@@ -57,15 +58,35 @@ module Place
     end
 
     def wrong_type err
-      raise err
+      begin
+        raise err
+      rescue
+        #customise how to handle the error
+        puts err
+      end
     end
 
     def wrong_params_number err
-      raise err
+      begin
+        raise err
+      rescue
+        #customise how to handle the error
+        puts err
+      end
     end
 
     def illegal_value err
-      raise err
+      begin
+        raise err
+      rescue
+        #customise how to handle the error
+        puts err
+      end
+    end
+
+    # check is num or string_num, eg. 1 or '1' return true
+    def is_integer str
+      return str.class == Fixnum || str == str.to_i.to_s
     end
 end
 
@@ -95,5 +116,11 @@ end
 module Right
   def execute
     @robot.right
+  end
+end
+
+module Report
+  def execute
+    @robot.report
   end
 end

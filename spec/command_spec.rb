@@ -4,11 +4,12 @@ require_relative "spec_helper"
 
 describe Command do
 	let(:robot) { Robot.new }
-	let(:command) { Command.new }
+	let(:command) { Command.new robot }
 
 	describe 'place module: ' do
-		context "illegal place:\n" do
+		context "" do
 			# wrong_type, illegal_value
+			before {}
 			negative_tests=
 				[ nil,
 					[],
@@ -29,19 +30,19 @@ describe Command do
 
 			negative_tests.each do |test|		
 				it "#{test} should raise error." do
-					expect {command.take(robot).extend(Place).execute(*test)}.to \
-						raise_error(RuntimeError)
+					expect(command.extend(Place).send(:check_place_params, *test)).not_to\
+						eq(true)
 				end
 			end
 			positive_tests.each do |test|		
 				it "#{test} should pass." do
-					expect {command.take(robot).extend(Place).execute(*test)}.not_to \
-						raise_error
+					expect(command.extend(Place).send(:check_place_params, *test)).to\
+						eq(true)
 				end
 			end
 		end 
 
-		context "legal place:\n" do
+		context "illegal place:" do
 			# wrong_type, illegal_value
 			tests=[ [ nil, nil, nil ], 
 							[ 0, 5, "EasT"], 
@@ -50,8 +51,8 @@ describe Command do
 
 			tests.each do |test|		
 				it "#{test} should raise error." do
-					expect {command.take(robot).extend(Place).execute(test)}.to \
-						raise_error(RuntimeError)
+					expect(command.extend(Place).send(:check_place_params, *test)).not_to\
+						eq(true)
 				end
 			end
 		end 
@@ -61,7 +62,7 @@ describe Command do
 		context "before place:\n" do
 
 			it "should ignore move:\n" do
-				command.take(robot).extend(Move).execute
+				command.extend(Move).execute
 				expect(robot.x).to eq(nil)
 			end
 		end
@@ -80,7 +81,7 @@ describe Command do
 					line = string_line.split(",")
 					# puts line.to_s
 					robot.place(line[0].to_i,line[1].to_i,line[2])
-					command.take(robot).extend(Move).execute
+					command.extend(Move).execute
 
 					expect(robot.x).to eq(line[3].to_i)
 					expect(robot.y).to eq(line[4].to_i)
@@ -96,11 +97,11 @@ describe Command do
 		#ignore left and right before place
 		context "before place:\n" do
 			it "should ignore left" do
-				command.take(robot).extend(Left).execute
+				command.extend(Left).execute
 				expect(robot.face).to eq(nil)
 			end
 			it "should ignore right" do
-				command.take(robot).extend(Right).execute
+				command.extend(Right).execute
 				expect(robot.face).to eq(nil)
 			end
 		end
@@ -112,12 +113,12 @@ describe Command do
 			(0..3).each do |i|
 				it "#{faces[i]} should turn right" do
 					robot.place(0,0,faces[i])
-					command.take(robot).extend(Right).execute
+					command.extend(Right).execute
 					expect(robot.face.upcase).to eq(rightout[i])
 				end
 				it "#{faces[i]} should turn left" do
 					robot.place(0,0,faces[i])
-					command.take(robot).extend(Left).execute
+					command.extend(Left).execute
 					expect(robot.face.upcase).to eq(leftout[i])
 				end
 			end

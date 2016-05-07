@@ -1,15 +1,8 @@
-require_relative "variable"
+require_relative "constants"
 
 class Robot
 	#attr_accessor method
 	attr_reader :x, :y, :face
-
-	@@faces = ["north","west","south","east"]
-
-	def initialize
-		@max_x = Variable.MAX_X
-		@max_y = Variable.MAX_Y
-	end
 
 	# command object should take care of the params check
 	def place x, y, face
@@ -27,17 +20,22 @@ class Robot
 	# turn right 90 degree
 	def right
 		if @face # robot is placed in board
-			current_index = @@faces.index(@face)
-			@face = @@faces[(current_index+3)%4]
+			current_index = Constants::FACES.index(@face)
+			@face = Constants::RIGHT_FACES[current_index]
 		end
 	end
 
 	# turn left 90 degree
 	def left
 		if @face # robot is placed in board
-			current_index = @@faces.index(@face)
-			@face = @@faces[(current_index+1)%4]
+			current_index = Constants::FACES.index(@face)
+			@face = Constants::LEFT_FACES[current_index]
 		end
+	end
+
+	# report current position and face 
+	def report
+		
 	end
 
 end
