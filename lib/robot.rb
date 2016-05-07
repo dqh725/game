@@ -11,19 +11,18 @@ class Robot
 		@max_y = Variable.MAX_Y
 	end
 
+	# command object should take care of the params check
 	def place x, y, face
-		if check_params x, y, face
-			@x = x
-			@y = y
-			@face = face.downcase
-		end
+		@x = x
+		@y = y
+		@face = face.downcase
 	end
 
 	# move forward one unit towards the current face
-	def increment_x; @x+=1 end
-	def increment_y; @y+=1 end
-	def decrement_x; @x-=1 end
-	def decrement_y; @y-=1 end
+	def forward_x(step); @x += step end
+	def forward_y(step); @y += step end
+	def backward_x(step); @x -= step end
+	def backward_y(step); @y -= step end
 
 	# turn right 90 degree
 	def right
@@ -36,36 +35,9 @@ class Robot
 	# turn left 90 degree
 	def left
 		if @face # robot is placed in board
-			current_index =@@faces.index(@face)
+			current_index = @@faces.index(@face)
 			@face = @@faces[(current_index+1)%4]
 		end
 	end
 
-
-	def check_params x, y, face
-		case
-		when x.class != Fixnum
-			wrong_type "x should be integer in [0, #{@max_x}]"
-		when y.class != Fixnum
-			wrong_type "y should be integer in [0, #{@max_y}]"
-		when face.class != String
-			wrong_type "face should be string type"
-		when x > @max_x || x < 0
-			illegal_value "x exceed the limitation"
-		when y > @max_y || y < 0
-			illegal_value "y exceed the limitation"
-		when @@faces.index(face.downcase).nil?
-			illegal_value "face value should be one of the #{@@faces}"
-		else
-			return true
-		end 
-	end
-
-	def wrong_type err
-		raise err
-	end
-
-	def illegal_value err
-		raise err
-	end
 end

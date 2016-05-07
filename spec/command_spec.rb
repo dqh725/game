@@ -5,7 +5,59 @@ require_relative "spec_helper"
 describe Command do
 	let(:robot) { Robot.new }
 	let(:command) { Command.new }
-	describe "move operation:" do
+
+	describe 'place module: ' do
+		context "illegal place:\n" do
+			# wrong_type, illegal_value
+			negative_tests=
+				[ nil,
+					[],
+					[1],
+					[1,1,"east","",""],
+					[ nil, nil, nil ], 
+					[ 0, 5, "EasT"], 
+					[ 0, 0, "f" ], 
+					[ -1, 1, "norTH" ]
+				]
+			positive_tests = 
+				[
+					[1,1,'norTh'],
+					[2,4, 'East'],
+					[2,4, 'west'],
+					[2,4, 'SOUTH']
+				]
+
+			negative_tests.each do |test|		
+				it "#{test} should raise error." do
+					expect {command.take(robot).extend(Place).execute(*test)}.to \
+						raise_error(RuntimeError)
+				end
+			end
+			positive_tests.each do |test|		
+				it "#{test} should pass." do
+					expect {command.take(robot).extend(Place).execute(*test)}.not_to \
+						raise_error
+				end
+			end
+		end 
+
+		context "legal place:\n" do
+			# wrong_type, illegal_value
+			tests=[ [ nil, nil, nil ], 
+							[ 0, 5, "EasT"], 
+							[ 0, 0, "f" ], 
+							[ -1, -1, "norTH" ] ]
+
+			tests.each do |test|		
+				it "#{test} should raise error." do
+					expect {command.take(robot).extend(Place).execute(test)}.to \
+						raise_error(RuntimeError)
+				end
+			end
+		end 
+	end
+
+	describe "move module: " do
 		context "before place:\n" do
 
 			it "should ignore move:\n" do
@@ -15,9 +67,12 @@ describe Command do
 		end
 
 		context "initialise with place:\n" do
-			# all test case of move in "move.txt"
-			
-			f=File.new("#{File.dirname(__FILE__)}/tests/move.txt",'r')
+
+			# all test case of move in "place_followed_by_move.txt"
+			# each line has 6 fields, seperated by ','
+			# command: place (0, 1, 2) and move, expect: field (3, 4, 5)
+
+			f=File.new("#{File.dirname(__FILE__)}/tests/place_and_move.txt",'r')
 			lines = f.read.split("\n")
 			# puts commands.to_s
 			lines.each do |string_line|
@@ -36,7 +91,7 @@ describe Command do
 		end
 	end
 
-	describe "left/right:" do
+	describe "left/right modules: " do
 
 		#ignore left and right before place
 		context "before place:\n" do
@@ -67,7 +122,5 @@ describe Command do
 				end
 			end
 		end
-
 	end
-
 end

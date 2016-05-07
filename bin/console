@@ -10,5 +10,6 @@ require "game"
 # require "pry"
 # Pry.start
 
-require "irb"
-IRB.start
+# require "irb"
+# IRB.start
+

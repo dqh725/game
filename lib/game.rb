@@ -1,7 +1,7 @@
 require "game/version"
 
-module Game
+class Game
   # Your code goes here...
 
-  
+
 end

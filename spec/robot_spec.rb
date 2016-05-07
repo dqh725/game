@@ -28,19 +28,6 @@ describe Robot do
 			end
 		end
 
-		context "illegal variable of place:\n" do
-			# wrong_type, illegal_value
-			tests=[ [ nil, nil, nil ], 
-							[ 0, 5, "EasT"], 
-							[ 0, 0, "f" ], 
-							[ -1, -1, "norTH" ] ]
-
-			tests.each do |test|		
-				it "#{test} should raise error." do
-					expect{robot.place(test[0], test[1], test[2])}.to raise_error(RuntimeError)
-				end
-			end
-		end
 	end
 
 

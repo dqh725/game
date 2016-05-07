@@ -1,0 +1,6 @@
+1,1,NOrTH,1,1,north
+1,1,n,error
+-1,4,South, error
+1,5,South, error
+a,a,South, error
+
