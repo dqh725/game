@@ -19,10 +19,15 @@ run `bin/setup` to install dependencies.
 run `rake spec --init` to run the tests.
 
 run `bin/console` for an interactive prompt that will allow you to experiment.
+	irb: game = Game::ToyRobot.new
+	irb: game.start
 
 run `bundle exec rake install`, to install this gem onto your local machine.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+## Addition operation
+
 
