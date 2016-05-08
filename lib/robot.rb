@@ -11,7 +11,7 @@ class Robot
 		@face = face.downcase
 	end
 
-	# move forward one unit towards the current face
+	# move forward 'step' unit(s) towards the current face
 	def forward_x(step); @x += step end
 	def forward_y(step); @y += step end
 	def backward_x(step); @x -= step end
@@ -35,7 +35,13 @@ class Robot
 
 	# report current position and face 
 	def report
-		
+		if @face
+			str = "=> Output: #{@x}, #{@y}, #{@face.upcase}"
+		else
+			str = "=> Robot not placed yet!"
+		end
+		puts str
+		return str
 	end
 
 end

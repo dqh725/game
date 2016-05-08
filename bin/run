@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+# author: Alba
+# date: 8/May/2016
+# setup script to run the game
+
+require_relative "../lib/game"
+vars = ARGF.argv
+
+case
+# default STDIN input source
+when vars.length == 0
+	f=STDIN
+# -f filename
+when (vars.length == 2 && vars[0]=="-f")
+
+	if File.file?(vars[1])
+ 		f=File.new(vars[1],"r")
+ 	else
+ 		raise "filename \"#{vars[1]}\" is not correct"
+ 	end
+
+else
+	abort "syntax error: bin/run [-f \"filepath\"]"
+end
+
+g=Game::ToyRobot.new input_source=f
+g.start
+f.close
